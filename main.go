@@ -95,8 +95,17 @@ func main() {
 		name := c.FormValue("name")
 		description := c.FormValue("description")
 		style := c.FormValue("style")
+		local := c.FormValue("local")
 
 		p := certificate.CreateCertificate(f, imgT, sF, name, description, style)
+
+		if local == "yes" {
+			err = p.OutputFileAndClose("hello.pdf")
+			if err != nil {
+				return c.Status(fiber.StatusOK).JSON(fiber.Map{"err": err.Error()})
+			}
+			return c.Status(fiber.StatusOK).JSON(fiber.Map{"err": "none"})
+		}
 
 		buf := bytes.NewBuffer(nil)
 
